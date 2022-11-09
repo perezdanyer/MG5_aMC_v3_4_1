@@ -6728,6 +6728,13 @@ class GridPackCmd(MadEventCmd):
             self.exec_cmd('systematics %s --from_card' % 
                           pjoin('Events', self.run_name, 'unweighted_events.lhe.gz'),
                                                postcmd=False,printcmd=False)
+            if os.path.exists(f'{self.me_dir}/Cards/reweight_card.dat'):
+                import madgraph.interface.reweight_interface as reweight_interface
+                rwgt_interface = reweight_interface.ReweightInterface
+                reweight_cmd = rwgt_interface(self.run_name, mother=self)
+                reweight_cmd.import_command_file(f'{self.me_dir}/Cards/reweight_card.dat')
+                misc.gzip(reweight_cmd.lhe_input.name)
+                reweight_cmd.do_quit('')
             
 
     def refine4grid(self, nb_event):
