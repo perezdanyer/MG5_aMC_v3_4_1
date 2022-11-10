@@ -146,13 +146,13 @@ def cp(path1, path2, log=True, error=False):
     path1 = format_path(path1)
     path2 = format_path(path2)
     try:
-        shutil.copy(path1, path2)
+        shutil.copyfile(path1, path2)
     except IOError as why:
         import madgraph.various.misc as misc
         try: 
             if os.path.exists(path2):
                 path2 = os.path.join(path2, os.path.split(path1)[1])
-            misc.copytree(path1, path2)
+            shutil.copyfile(path1, path2)
         except IOError as why:
             if error:
                 raise

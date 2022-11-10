@@ -295,7 +295,7 @@ class ProcessExporterFortran(VirtualExporter):
             for card in ['plot_card']:
                 if os.path.isfile(pjoin(self.dir_path, 'Cards',card + '.dat')):
                     try:
-                        shutil.copy(pjoin(self.dir_path, 'Cards',card + '.dat'),
+                        shutil.copyfile(pjoin(self.dir_path, 'Cards',card + '.dat'),
                                    pjoin(self.dir_path, 'Cards', card + '_default.dat'))
                     except IOError:
                         logger.warning("Failed to copy " + card + ".dat to default")
@@ -319,7 +319,7 @@ class ProcessExporterFortran(VirtualExporter):
             for card in ['plot_card']:
                 if os.path.isfile(pjoin(self.dir_path, 'Cards',card + '.dat')):
                     try:
-                        shutil.copy(pjoin(self.dir_path, 'Cards', card + '.dat'),
+                        shutil.copyfile(pjoin(self.dir_path, 'Cards', card + '.dat'),
                                    pjoin(self.dir_path, 'Cards', card + '_default.dat'))
                     except IOError:
                         logger.warning("Failed to copy " + card + ".dat to default")            
@@ -327,7 +327,7 @@ class ProcessExporterFortran(VirtualExporter):
             assert self.mgme_dir, \
                       "No valid MG_ME path given for MG4 run directory creation."
         try:
-            shutil.copy(pjoin(self.mgme_dir, 'MGMEVersion.txt'), self.dir_path)
+            shutil.copyfile(pjoin(self.mgme_dir, 'MGMEVersion.txt'), pjoin(self.dir_path, 'MGMEVersion.txt'))
         except IOError:
             MG5_version = misc.get_pkg_info()
             open(pjoin(self.dir_path, 'MGMEVersion.txt'), 'w').write(MG5_version['version'])
@@ -492,7 +492,7 @@ class ProcessExporterFortran(VirtualExporter):
             for level in ['hadron','parton']:
                 # Copying these cards turn on the use of MadAnalysis5 by default.
                 if os.path.isfile(pjoin(self.dir_path,'Cards','madanalysis5_%s_card_default.dat'%level)):
-                    shutil.copy(pjoin(self.dir_path,'Cards','madanalysis5_%s_card_default.dat'%level),
+                    shutil.copyfile(pjoin(self.dir_path,'Cards','madanalysis5_%s_card_default.dat'%level),
                                 pjoin(self.dir_path,'Cards','madanalysis5_%s_card.dat'%level))
 
     #===========================================================================
@@ -2204,9 +2204,9 @@ class ProcessExporterFortranSA(ProcessExporterFortran):
         
         # Information at top-level
         #Write version info
-        shutil.copy(pjoin(temp_dir, 'TemplateVersion.txt'), self.dir_path)
+        shutil.copyfile(pjoin(temp_dir, 'TemplateVersion.txt'), pjoin(self.dir_path, 'TemplateVersion.txt'))
         try:
-            shutil.copy(pjoin(self.mgme_dir, 'MGMEVersion.txt'), self.dir_path)
+            shutil.copyfile(pjoin(self.mgme_dir, 'MGMEVersion.txt'), pjoin(self.dir_path, 'MGMEVersion.txt'))
         except IOError:
             MG5_version = misc.get_pkg_info()
             open(pjoin(self.dir_path, 'MGMEVersion.txt'), 'w').write( \
@@ -2214,7 +2214,7 @@ class ProcessExporterFortranSA(ProcessExporterFortran):
         
         
         # Add file in SubProcesses
-        shutil.copy(pjoin(self.mgme_dir, 'madgraph', 'iolibs', 'template_files', 'makefile_sa_f_sp'), 
+        shutil.copyfile(pjoin(self.mgme_dir, 'madgraph', 'iolibs', 'template_files', 'makefile_sa_f_sp'), 
                     pjoin(self.dir_path, 'SubProcesses', 'makefileP'))
 
         if model['running_elements']:
@@ -2228,16 +2228,16 @@ class ProcessExporterFortranSA(ProcessExporterFortran):
             fsock.close()
         else:
             # Add file in SubProcesses
-            shutil.copy(pjoin(self.mgme_dir, 'madgraph', 'iolibs', 'template_files', 'makefile_sa_f_sp'), 
+            shutil.copyfile(pjoin(self.mgme_dir, 'madgraph', 'iolibs', 'template_files', 'makefile_sa_f_sp'), 
                     pjoin(self.dir_path, 'SubProcesses', 'makefileP'))
         
         if self.format == 'standalone':
-            shutil.copy(pjoin(self.mgme_dir, 'madgraph', 'iolibs', 'template_files', 'check_sa.f'), 
+            shutil.copyfile(pjoin(self.mgme_dir, 'madgraph', 'iolibs', 'template_files', 'check_sa.f'), 
                     pjoin(self.dir_path, 'SubProcesses', 'check_sa.f'))
                         
         # Add file in Source
-        shutil.copy(pjoin(temp_dir, 'Source', 'make_opts'), 
-                    pjoin(self.dir_path, 'Source'))        
+        shutil.copyfile(pjoin(temp_dir, 'Source', 'make_opts'), 
+                    pjoin(self.dir_path, 'Source', 'make_opts'))        
         # add the makefile 
         filename = pjoin(self.dir_path,'Source','makefile')
         self.write_source_makefile(writers.FileWriter(filename),model)          
@@ -2653,7 +2653,7 @@ CF2PY integer, intent(in) :: new_value
             text = text.replace('LINKLIBS_ALL =  -L../lib/', 'LINKLIBS_ALL =  -L../lib/ -lrunning ')
             open(destination, 'w').write(text)
         else:
-             shutil.copy(template, destination)
+             shutil.copyfile(template, destination)
 
     def create_MA5_cards(self,*args,**opts):
         """ Overload the function of the mother so as to bypass this in StandAlone."""
